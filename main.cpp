@@ -30,7 +30,7 @@ void SFML_test_function() {
 }
 
 int main() {
-    Maze current = Maze(100, 1);
+    Maze current_maze = Maze(100, 1);
     SFML_test_function();
     return 0;
 }

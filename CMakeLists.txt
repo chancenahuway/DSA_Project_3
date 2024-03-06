@@ -6,9 +6,7 @@ set(GCC_COVERAGE_COMPILE_FLAGS "-Wall -Werror")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GCC_COVERAGE_COMPILE_FLAGS}")
 
 set(SOURCE_FILES main.cpp)
-add_executable(DSA_Project_3 ${SOURCE_FILES} main.cpp
-                                                Maze.cpp
-                                                Maze.h)
+add_executable(DSA_Project_3 ${SOURCE_FILES} main.cpp Maze.cpp Maze.h)
 include_directories(/usr/local/include)
 
 find_package(SFML 2.5 COMPONENTS system window graphics network audio REQUIRED)
