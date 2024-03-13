@@ -37,6 +37,8 @@ private:
     // Maze member functions
     void codify_adjacency_info();
     void generate_growing_tree(int flavor);
+    void mouse_press_left(int x, int y);
+    void draw_maze(sf::RenderWindow& window);
 
 public:
 
