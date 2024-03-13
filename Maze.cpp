@@ -6,6 +6,8 @@
 #include <random>
 #include <SFML/Graphics.hpp>
 #include "Maze.h"
+#include <iostream>
+
 using namespace std;
 
 void Maze::codify_adjacency_info() {
@@ -103,6 +105,16 @@ void Maze::generate_growing_tree(int flavor) {
     }
 }
 
+void Maze::mouse_press_left(int x, int y)
+{
+    cout << "Left Click Position: " << x << ", " << y << endl;
+    //if tile is selected, toggle path color
+}
+
+void Maze::draw_maze(sf::RenderWindow& window)
+{
+
+}
 Maze::Tile::Tile(int x, int y) {
     this->x = x;
     this->y = y;
