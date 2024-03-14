@@ -4,6 +4,7 @@
 
 #pragma once
 #include <vector>
+#include "Tile.h"
 using namespace std;
 
 // Types of mazes:
@@ -14,19 +15,20 @@ class Maze {
 private:
 
     // Nested Tile struct
-    struct Tile {
-        // Tile member variables
-        vector<Tile*> adjacent_tiles;
-        vector<Tile*> connected_tiles;
-        int x;
-        int y;
-
-        // Tile member functions
-
-
-        // Tile constructor
-        Tile(int x, int y);
-    };
+//    struct Tile {
+//        // Tile member variables
+//        vector<Tile*> adjacent_tiles;
+//        vector<Tile*> connected_tiles;
+//        int x;
+//        int y;
+//
+//        // Tile member functions
+//        sf::Sprite& GetSprite();
+//
+//
+//        // Tile constructor
+//        Tile(int x, int y);
+//    };
 
     // Maze member variables
     int side_length;
@@ -37,11 +39,15 @@ private:
     // Maze member functions
     void codify_adjacency_info();
     void generate_growing_tree(int flavor);
-    void mouse_press_left(int x, int y);
-    void draw_maze(sf::RenderWindow& window);
+
+
 
 public:
 
     // Maze Constructor
     Maze(int side_length, int maze_type);
+
+
+    void draw_maze(sf::RenderWindow& window);
+    void mouse_press_left(int x, int y);
 };
