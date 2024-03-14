@@ -7,6 +7,7 @@
 #include <SFML/Graphics.hpp>
 #include "Maze.h"
 #include <iostream>
+#include "TextureManager.h"
 
 using namespace std;
 
@@ -107,18 +108,21 @@ void Maze::generate_growing_tree(int flavor) {
 
 void Maze::mouse_press_left(int x, int y)
 {
-    cout << "Left Click Position: " << x << ", " << y << endl;
+    cout << "Left Click Position: " << x/10 + 1 << ", " << y/10 + 1 << endl;
     //if tile is selected, toggle path color
 }
 
-void Maze::draw_maze(sf::RenderWindow& window)
-{
+void Maze::draw_maze(sf::RenderWindow& window) {
+    for(int i = 0; i < tiles.size(); i++)
+        window.draw(tiles[i]->getSprite());
+}
+//Maze::Tile::Tile(int x, int y) {
+//    this->x = x;
+//    this->y = y;
+//    sf::Sprite _tileFront;
+//    _tileFront.setTexture(TextureManager::GetTexture("square"));
+//}
 
-}
-Maze::Tile::Tile(int x, int y) {
-    this->x = x;
-    this->y = y;
-}
 
 Maze::Maze(int side_length, int maze_type) {
     // Assign input parameters
