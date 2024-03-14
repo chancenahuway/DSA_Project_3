@@ -8,18 +8,18 @@ using namespace std;
 int main()
 {
 
-    int width = 600;
-    int height = 600;
+    int width = 1000;
+    int height = 1100;
 
     Maze maze(100, 1);
 
     sf::RenderWindow window(sf::VideoMode(width, height), "Maze Masters (What was our Name??)");
 
     sf::Sprite startButton(TextureManager::GetTexture("start"));
-    startButton.setPosition(width/2, 500);
+    startButton.setPosition(width/2 - 100, 1000);
 
     sf::Sprite showButton(TextureManager::GetTexture("show"));
-    showButton.setPosition(width/2, 550);
+    showButton.setPosition(width/2 + 100, 1000);
 
     while (window.isOpen())
     {
@@ -34,7 +34,8 @@ int main()
                 if (event.mouseButton.button == sf::Mouse::Left) {
                     auto mousePosition = sf::Mouse::getPosition(window);
                     //have the maze account for the click if necessary automatically
-                    //maze.mouse_press_left(mousePosition.x, mousePostion.y);}
+                    maze.mouse_press_left(mousePosition.x, mousePosition.y);
+
 
                     if (startButton.getGlobalBounds().contains(mousePosition.x, mousePosition.y))
                         cout << "1" << endl; //FIXME
@@ -62,7 +63,7 @@ int main()
         window.draw(startButton);
         window.draw(showButton);
 
-        //maze.draw_maze(window);
+        maze.draw_maze(window);
         window.display();
     }
 
