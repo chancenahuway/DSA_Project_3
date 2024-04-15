@@ -1,45 +1,29 @@
-//
-// This program was written by Samson Carter, Dylan Dixon, and Chance Nahuway.
-//
-
 #pragma once
 #include <vector>
+#include <queue>
+#include <set>
+#include <map>
 using namespace std;
 
-// Types of mazes:
-// Type 1: Growing Tree Algorithm
-
 class Maze {
-
 private:
-
-    // Nested Tile struct
     struct Tile {
-        // Tile member variables
-        vector<Tile*> adjacent_tiles;
         vector<Tile*> connected_tiles;
-        int x;
-        int y;
-
-        // Tile member functions
-
-
-        // Tile constructor
+        vector<Tile*> adjacent_tiles;
+        int x, y;
         Tile(int x, int y);
     };
 
-    // Maze member variables
     int side_length;
     int num_tiles;
     int maze_type;
     vector<Tile*> tiles;
 
-    // Maze member functions
     void codify_adjacency_info();
     void generate_growing_tree(int flavor);
 
 public:
-
-    // Maze Constructor
     Maze(int side_length, int maze_type);
+    vector<pair<int, int>> BFS();
+    void displayMaze();
 };
