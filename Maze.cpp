@@ -4,8 +4,8 @@
 
 #include <algorithm>
 #include <random>
-#include <SFML/Graphics.hpp>
 #include "Maze.h"
+#include <iostream>
 using namespace std;
 
 void Maze::codify_adjacency_info() {
@@ -16,46 +16,46 @@ void Maze::codify_adjacency_info() {
             tiles[i]->adjacent_tiles.push_back(tiles[i + 1]);
             tiles[i]->adjacent_tiles.push_back(tiles[i + side_length]);
         }
-        // Top right corner tile
+            // Top right corner tile
         else if (i == side_length - 1) {
             tiles[i]->adjacent_tiles.push_back(tiles[i - 1]);
             tiles[i]->adjacent_tiles.push_back(tiles[i + side_length]);
         }
-        // Bottom left corner tile
+            // Bottom left corner tile
         else if (i == tiles.size() - side_length) {
             tiles[i]->adjacent_tiles.push_back(tiles[i + 1]);
             tiles[i]->adjacent_tiles.push_back(tiles[i - side_length]);
         }
-        // Bottom right corner tile
+            // Bottom right corner tile
         else if (i == tiles.size() - 1) {
             tiles[i]->adjacent_tiles.push_back(tiles[i - 1]);
             tiles[i]->adjacent_tiles.push_back(tiles[i - side_length]);
         }
-        // Top exterior tiles
+            // Top exterior tiles
         else if (i < side_length - 1) {
             tiles[i]->adjacent_tiles.push_back(tiles[i - 1]);
             tiles[i]->adjacent_tiles.push_back(tiles[i + 1]);
             tiles[i]->adjacent_tiles.push_back(tiles[i + side_length]);
         }
-        // Bottom exterior tiles
+            // Bottom exterior tiles
         else if (tiles.size() - side_length < i && i < tiles.size()) {
             tiles[i]->adjacent_tiles.push_back(tiles[i - 1]);
             tiles[i]->adjacent_tiles.push_back(tiles[i + 1]);
             tiles[i]->adjacent_tiles.push_back(tiles[i - side_length]);
         }
-        // Left exterior tiles
+            // Left exterior tiles
         else if (i % side_length == 0 && i < tiles.size() - side_length) {
             tiles[i]->adjacent_tiles.push_back(tiles[i + 1]);
             tiles[i]->adjacent_tiles.push_back(tiles[i - side_length]);
             tiles[i]->adjacent_tiles.push_back(tiles[i + side_length]);
         }
-        // Right exterior tiles
+            // Right exterior tiles
         else if (i % side_length == side_length - 1 && side_length - 1 < i && i < tiles.size() - 1) {
             tiles[i]->adjacent_tiles.push_back(tiles[i - 1]);
             tiles[i]->adjacent_tiles.push_back(tiles[i - side_length]);
             tiles[i]->adjacent_tiles.push_back(tiles[i + side_length]);
         }
-        // Interior tiles
+            // Interior tiles
         else {
             tiles[i]->adjacent_tiles.push_back(tiles[i - 1]);
             tiles[i]->adjacent_tiles.push_back(tiles[i + 1]);
@@ -93,7 +93,7 @@ void Maze::generate_growing_tree(int flavor) {
         if (unconnected_adjacent_tiles.empty()) {
             temp.erase(std::remove(temp.begin(), temp.end(), active), temp.end());
         }
-        // Otherwise, connect active and one of its unconnected adjacent tiles to each other, and add that tile to temp
+            // Otherwise, connect active and one of its unconnected adjacent tiles to each other, and add that tile to temp
         else {
             int random3 = rand() % unconnected_adjacent_tiles.size();
             active->connected_tiles.push_back(unconnected_adjacent_tiles[random3]);
@@ -131,6 +131,72 @@ Maze::Maze(int side_length, int maze_type) {
     else if (maze_type == 1) {
         // Growing Tree - Prim's Algorithm
         this->generate_growing_tree(1);
+    }
+}
+
+vector<pair<int, int>> Maze::BFS() {
+    queue<Tile*> q;
+    set<Tile*> visited;
+    map<Tile*, Tile*> parent;  // To reconstruct the path
+    vector<pair<int, int>> path;  // Path as a vector of coordinates
+
+    // Starting from the first tile
+    Tile* start = tiles[0];    //start tile = tile 0
+    Tile* end = tiles.back();  //end tile = last tile
+
+    visited.insert(start);
+    q.push(start);
+    parent[start] = nullptr;  //start tile has no parent
+
+    while (!q.empty()) {
+        Tile* current = q.front();
+        q.pop();
+
+        if (current == end) {
+            //reconstruct the path
+            while (current != nullptr) {
+                path.emplace_back(current->x, current->y);
+                current = parent[current];
+            }
+            reverse(path.begin(), path.end());
+            return path;
+        }
+
+        //explore connected tiles
+        for (Tile* neighbor : current->connected_tiles) {
+            if (visited.find(neighbor) == visited.end()) {
+                visited.insert(neighbor);
+                q.push(neighbor);
+                parent[neighbor] = current;  // Mapping the path
+            }
+        }
+    }
+    return path;  //if no path is found, return an empty vector
+}
+
+void Maze::displayMaze() {
+    vector<vector<char>> displayGrid(2 * side_length - 1, vector<char>(2 * side_length - 1, ' '));
+
+    for (int i = 0; i < tiles.size(); i++) {
+        int row = 2 * (tiles[i]->y);
+        int col = 2 * (tiles[i]->x);
+        displayGrid[row][col] = 'X';  // Mark the tile position
+
+        for (auto& connected : tiles[i]->connected_tiles) {
+            if (connected->x == tiles[i]->x + 1) {
+                displayGrid[row][col + 1] = '-';  // Horizontal connection to the right
+            }
+            if (connected->y == tiles[i]->y + 1) {
+                displayGrid[row + 1][col] = '|';  // Vertical connection downward
+            }
+        }
+    }
+
+    for (auto& row : displayGrid) {
+        for (auto& col : row) {
+            cout << col;
+        }
+        cout << endl;
     }
 }
 
