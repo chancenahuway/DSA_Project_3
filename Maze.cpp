@@ -103,35 +103,35 @@ void Maze::generate_growing_tree(int flavor) {
     }
 }
 
-Maze::Tile::Tile(int x, int y) {
-    this->x = x;
-    this->y = y;
-}
 
-Maze::Maze(int side_length, int maze_type) {
-    // Assign input parameters
-    this->side_length = side_length;
-    this->num_tiles = side_length * side_length;
-    this->maze_type = maze_type;
-
+Maze::Maze(int side_length, int maze_type) : side_length(side_length), num_tiles(side_length * side_length), maze_type(maze_type) {
     // Construct list of tiles and codify adjacency info
     for (int i = 0; i < side_length; i++) {
         for (int j = 0; j < side_length; j++) {
             Tile *next_tile = new Tile(j, i);
-            this->tiles.push_back(next_tile);
+            tiles.push_back(next_tile);
         }
     }
-    this->codify_adjacency_info();
+    codify_adjacency_info();
 
     // Build maze
     if (maze_type == 0) {
-        // Growing Tree - Recursive Backtracker Algorithm
-        this->generate_growing_tree(0);
+        // Recursive Backtracker Algorithm
+        generate_growing_tree(0);
+    } else if (maze_type == 1) {
+        // Prim's Algorithm
+        generate_growing_tree(1);
     }
-    else if (maze_type == 1) {
-        // Growing Tree - Prim's Algorithm
-        this->generate_growing_tree(1);
+}
+
+Maze::~Maze() {
+    for (Tile* tile : tiles) {
+        delete tile;
     }
+}
+
+vector<Maze::Tile*>& Maze::getAllTiles() {
+    return tiles;
 }
 
 vector<pair<int, int>> Maze::BFS() {
@@ -174,6 +174,84 @@ vector<pair<int, int>> Maze::BFS() {
     return path;  //if no path is found, return an empty vector
 }
 
+void Maze::drawLines(sf::RenderWindow& window) {
+    sf::RectangleShape line(sf::Vector2f(15, 1)); // Horizontal line
+    line.setFillColor(sf::Color::Blue);
+    sf::RectangleShape vLine(sf::Vector2f(1, 15)); // Vertical line
+    vLine.setFillColor(sf::Color::Blue);
+
+    for (unsigned int i = 0; i < tiles.size(); i++) {
+        // Draw horizontal line above top row and below last row tiles
+        if (i < side_length) { // Top row
+            line.setPosition(tiles[i]->sprite.getPosition().x, tiles[i]->sprite.getPosition().y);
+            window.draw(line);
+        }
+
+        if (i >= tiles.size() - side_length) { // Last row
+            bool hasBottomNeighbor = false;
+            for (auto neighbor : tiles[i]->connected_tiles) {
+                if (neighbor->y > tiles[i]->y) {
+                    hasBottomNeighbor = true;
+                    break;
+                }
+            }
+            if (!hasBottomNeighbor) {
+                line.setPosition(tiles[i]->sprite.getPosition().x, tiles[i]->sprite.getPosition().y + 15);
+                window.draw(line);
+            }
+        }
+
+        // Draw vertical line for left and right side boundaries
+        if (i % side_length == 0) { // Left column
+            vLine.setPosition(tiles[i]->sprite.getPosition().x, tiles[i]->sprite.getPosition().y);
+            window.draw(vLine);
+        }
+
+        if ((i + 1) % side_length == 0) { // Right column
+            vLine.setPosition(tiles[i]->sprite.getPosition().x + 15, tiles[i]->sprite.getPosition().y);
+            window.draw(vLine);
+        }
+
+        // Draw vertical lines between horizontally adjacent but not connected tiles
+        if ((i + 1) % side_length != 0) { // Not in right-most column
+            Tile* currentTile = tiles[i];
+            Tile* rightTile = tiles[i + 1]; // Right adjacent tile
+
+            bool isConnectedToRight = false;
+            for (auto& connectedTile : currentTile->connected_tiles) {
+                if (connectedTile == rightTile) {
+                    isConnectedToRight = true;
+                    break;
+                }
+            }
+
+            if (!isConnectedToRight) {
+                vLine.setPosition(currentTile->sprite.getPosition().x + 15, currentTile->sprite.getPosition().y);
+                window.draw(vLine);
+            }
+        }
+
+        // Draw horizontal lines between vertically adjacent but not connected tiles
+        if (i < tiles.size() - side_length) { // Not in bottom-most row
+            Tile* currentTile = tiles[i];
+            Tile* bottomTile = tiles[i + side_length]; // Bottom adjacent tile
+
+            bool isConnectedToBottom = false;
+            for (auto& connectedTile : currentTile->connected_tiles) {
+                if (connectedTile == bottomTile) {
+                    isConnectedToBottom = true;
+                    break;
+                }
+            }
+
+            if (!isConnectedToBottom) {
+                line.setPosition(currentTile->sprite.getPosition().x, currentTile->sprite.getPosition().y + 15);
+                window.draw(line);
+            }
+        }
+    }
+}
+
 void Maze::displayMaze() {
     vector<vector<char>> displayGrid(2 * side_length - 1, vector<char>(2 * side_length - 1, ' '));
 
@@ -199,6 +277,8 @@ void Maze::displayMaze() {
         cout << endl;
     }
 }
+
+
 
 // References:
 // Growing tree algorithm: https://weblog.jamisbuck.org/2011/1/27/maze-generation-growing-tree-algorithm
