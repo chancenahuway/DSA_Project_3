@@ -3,6 +3,8 @@
 #include <queue>
 #include <set>
 #include <map>
+#include "SFML/Graphics.hpp"
+#include "TextureManager.h"
 using namespace std;
 
 class Maze {
@@ -11,7 +13,12 @@ private:
         vector<Tile*> connected_tiles;
         vector<Tile*> adjacent_tiles;
         int x, y;
-        Tile(int x, int y);
+        sf::Sprite sprite;
+
+        Tile(int x, int y): x(x), y(y) {
+            sprite.setTexture(TextureManager::GetTexture("square-white"));
+            sprite.setPosition((x * 15) + 50, (y * 15) + 20); //adjust to match sprite size/grid size
+        };
     };
 
     int side_length;
@@ -24,6 +31,11 @@ private:
 
 public:
     Maze(int side_length, int maze_type);
+    ~Maze();
     vector<pair<int, int>> BFS();
     void displayMaze();
+    vector<Tile*>& getAllTiles();
+    int getSideLength() const { return side_length; }
+    void drawLines(sf::RenderWindow& window);
+
 };
