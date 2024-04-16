@@ -14,10 +14,18 @@ private:
         vector<Tile*> adjacent_tiles;
         int x, y;
         sf::Sprite sprite;
+        sf::Sprite visiting;
+        sf::Sprite path;
 
         Tile(int x, int y): x(x), y(y) {
             sprite.setTexture(TextureManager::GetTexture("square-white"));
             sprite.setPosition((x * 15) + 50, (y * 15) + 20); //adjust to match sprite size/grid size
+            visiting.setTexture(TextureManager::GetTexture("square-red"));
+            visiting.setPosition((x * 15) + 50, (y * 15) + 20);
+            path.setTexture(TextureManager::GetTexture("square-blue"));
+            path.setPosition((x * 15) + 50, (y * 15) + 20);
+
+
         };
     };
 
@@ -32,10 +40,11 @@ private:
 public:
     Maze(int side_length, int maze_type);
     ~Maze();
-    vector<pair<int, int>> BFS();
+    vector<pair<int, int>> BFS(sf::RenderWindow& window);
     void displayMaze();
     vector<Tile*>& getAllTiles();
     int getSideLength() const { return side_length; }
     void drawLines(sf::RenderWindow& window);
+    void drawAndUpdate(sf::RenderWindow& window);
 
 };
