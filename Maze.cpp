@@ -134,7 +134,7 @@ vector<Maze::Tile*>& Maze::getAllTiles() {
     return tiles;
 }
 
-vector<pair<int, int>> Maze::BFS() {
+vector<pair<int, int>> Maze::BFS(sf::RenderWindow& window) {
     queue<Tile*> q;
     set<Tile*> visited;
     map<Tile*, Tile*> parent;  // To reconstruct the path
@@ -152,26 +152,46 @@ vector<pair<int, int>> Maze::BFS() {
         Tile* current = q.front();
         q.pop();
 
+        // Visualize visiting
+        current->sprite = current->visiting;
+        drawAndUpdate(window);
+
         if (current == end) {
-            //reconstruct the path
+            // Reconstruct the path
             while (current != nullptr) {
+                current->sprite = current->path;
                 path.emplace_back(current->x, current->y);
                 current = parent[current];
             }
             reverse(path.begin(), path.end());
+            drawAndUpdate(window);
             return path;
         }
 
-        //explore connected tiles
+        // Explore connected tiles
         for (Tile* neighbor : current->connected_tiles) {
             if (visited.find(neighbor) == visited.end()) {
                 visited.insert(neighbor);
                 q.push(neighbor);
                 parent[neighbor] = current;  // Mapping the path
+                neighbor->sprite = neighbor->visiting;
             }
         }
+        drawAndUpdate(window);
     }
-    return path;  //if no path is found, return an empty vector
+    return path;  // If no path is found, return an empty vector
+}
+
+void Maze::drawAndUpdate(sf::RenderWindow& window) {
+    window.clear(sf::Color::White);
+    for (auto& tile : tiles) {
+        window.draw(tile->sprite);
+    }
+    // Draw lines
+    drawLines(window);
+
+    window.display();
+    sf::sleep(sf::milliseconds(10)); // Delay for visualization effect
 }
 
 void Maze::drawLines(sf::RenderWindow& window) {
