@@ -1,45 +1,51 @@
-//
-// This program was written by Samson Carter, Dylan Dixon, and Chance Nahuway.
-//
-
 #pragma once
 #include <vector>
+#include <queue>
+#include <set>
+#include <map>
+#include "SFML/Graphics.hpp"
+#include "TextureManager.h"
 using namespace std;
 
-// Types of mazes:
-// Type 1: Growing Tree Algorithm
-
 class Maze {
-
 private:
-
-    // Nested Tile struct
     struct Tile {
-        // Tile member variables
-        vector<Tile*> adjacent_tiles;
         vector<Tile*> connected_tiles;
-        int x;
-        int y;
+        vector<Tile*> adjacent_tiles;
+        int x, y;
+        sf::Sprite sprite;
+        sf::Sprite visiting;
+        sf::Sprite path;
 
-        // Tile member functions
+        Tile(int x, int y): x(x), y(y) {
+            sprite.setTexture(TextureManager::GetTexture("square-white"));
+            sprite.setPosition((x * 15) + 50, (y * 15) + 20); //adjust to match sprite size/grid size
+            visiting.setTexture(TextureManager::GetTexture("square-red"));
+            visiting.setPosition((x * 15) + 50, (y * 15) + 20);
+            path.setTexture(TextureManager::GetTexture("square-blue"));
+            path.setPosition((x * 15) + 50, (y * 15) + 20);
 
 
-        // Tile constructor
-        Tile(int x, int y);
+        };
     };
 
-    // Maze member variables
     int side_length;
     int num_tiles;
     int maze_type;
     vector<Tile*> tiles;
 
-    // Maze member functions
     void codify_adjacency_info();
     void generate_growing_tree(int flavor);
 
 public:
-
-    // Maze Constructor
     Maze(int side_length, int maze_type);
+    ~Maze();
+    vector<pair<int, int>> dijkstraAlgorithm(sf::RenderWindow& window);
+    vector<pair<int, int>> depthFirstSearch(sf::RenderWindow& window);
+    void displayMaze();
+    vector<Tile*>& getAllTiles();
+    int getSideLength() const { return side_length; }
+    void drawLines(sf::RenderWindow& window);
+    void drawAndUpdate(sf::RenderWindow& window);
+
 };
