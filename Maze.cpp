@@ -10,69 +10,69 @@
 #include <iostream>
 using namespace std;
 
-void Maze::codify_adjacency_info() {
-    // Populate adjacent_tiles vector for each tile
+void Maze::codifyAdjacencyInfo() {
+    // Populate adjacentTiles vector for each tile
     for (unsigned int i = 0; i < tiles.size(); i++) {
         // Top left corner tile
         if (i == 0) {
-            tiles[i]->adjacent_tiles.push_back(tiles[i + 1]);
-            tiles[i]->adjacent_tiles.push_back(tiles[i + side_length]);
+            tiles[i]->adjacentTiles.push_back(tiles[i + 1]);
+            tiles[i]->adjacentTiles.push_back(tiles[i + sideLength]);
         }
             // Top right corner tile
-        else if (i == side_length - 1) {
-            tiles[i]->adjacent_tiles.push_back(tiles[i - 1]);
-            tiles[i]->adjacent_tiles.push_back(tiles[i + side_length]);
+        else if (i == sideLength - 1) {
+            tiles[i]->adjacentTiles.push_back(tiles[i - 1]);
+            tiles[i]->adjacentTiles.push_back(tiles[i + sideLength]);
         }
             // Bottom left corner tile
-        else if (i == tiles.size() - side_length) {
-            tiles[i]->adjacent_tiles.push_back(tiles[i + 1]);
-            tiles[i]->adjacent_tiles.push_back(tiles[i - side_length]);
+        else if (i == tiles.size() - sideLength) {
+            tiles[i]->adjacentTiles.push_back(tiles[i + 1]);
+            tiles[i]->adjacentTiles.push_back(tiles[i - sideLength]);
         }
             // Bottom right corner tile
         else if (i == tiles.size() - 1) {
-            tiles[i]->adjacent_tiles.push_back(tiles[i - 1]);
-            tiles[i]->adjacent_tiles.push_back(tiles[i - side_length]);
+            tiles[i]->adjacentTiles.push_back(tiles[i - 1]);
+            tiles[i]->adjacentTiles.push_back(tiles[i - sideLength]);
         }
             // Top exterior tiles
-        else if (i < side_length - 1) {
-            tiles[i]->adjacent_tiles.push_back(tiles[i - 1]);
-            tiles[i]->adjacent_tiles.push_back(tiles[i + 1]);
-            tiles[i]->adjacent_tiles.push_back(tiles[i + side_length]);
+        else if (i < sideLength - 1) {
+            tiles[i]->adjacentTiles.push_back(tiles[i - 1]);
+            tiles[i]->adjacentTiles.push_back(tiles[i + 1]);
+            tiles[i]->adjacentTiles.push_back(tiles[i + sideLength]);
         }
             // Bottom exterior tiles
-        else if (tiles.size() - side_length < i && i < tiles.size()) {
-            tiles[i]->adjacent_tiles.push_back(tiles[i - 1]);
-            tiles[i]->adjacent_tiles.push_back(tiles[i + 1]);
-            tiles[i]->adjacent_tiles.push_back(tiles[i - side_length]);
+        else if (tiles.size() - sideLength < i && i < tiles.size()) {
+            tiles[i]->adjacentTiles.push_back(tiles[i - 1]);
+            tiles[i]->adjacentTiles.push_back(tiles[i + 1]);
+            tiles[i]->adjacentTiles.push_back(tiles[i - sideLength]);
         }
             // Left exterior tiles
-        else if (i % side_length == 0 && i < tiles.size() - side_length) {
-            tiles[i]->adjacent_tiles.push_back(tiles[i + 1]);
-            tiles[i]->adjacent_tiles.push_back(tiles[i - side_length]);
-            tiles[i]->adjacent_tiles.push_back(tiles[i + side_length]);
+        else if (i % sideLength == 0 && i < tiles.size() - sideLength) {
+            tiles[i]->adjacentTiles.push_back(tiles[i + 1]);
+            tiles[i]->adjacentTiles.push_back(tiles[i - sideLength]);
+            tiles[i]->adjacentTiles.push_back(tiles[i + sideLength]);
         }
             // Right exterior tiles
-        else if (i % side_length == side_length - 1 && side_length - 1 < i && i < tiles.size() - 1) {
-            tiles[i]->adjacent_tiles.push_back(tiles[i - 1]);
-            tiles[i]->adjacent_tiles.push_back(tiles[i - side_length]);
-            tiles[i]->adjacent_tiles.push_back(tiles[i + side_length]);
+        else if (i % sideLength == sideLength - 1 && sideLength - 1 < i && i < tiles.size() - 1) {
+            tiles[i]->adjacentTiles.push_back(tiles[i - 1]);
+            tiles[i]->adjacentTiles.push_back(tiles[i - sideLength]);
+            tiles[i]->adjacentTiles.push_back(tiles[i + sideLength]);
         }
             // Interior tiles
         else {
-            tiles[i]->adjacent_tiles.push_back(tiles[i - 1]);
-            tiles[i]->adjacent_tiles.push_back(tiles[i + 1]);
-            tiles[i]->adjacent_tiles.push_back(tiles[i - side_length]);
-            tiles[i]->adjacent_tiles.push_back(tiles[i + side_length]);
+            tiles[i]->adjacentTiles.push_back(tiles[i - 1]);
+            tiles[i]->adjacentTiles.push_back(tiles[i + 1]);
+            tiles[i]->adjacentTiles.push_back(tiles[i - sideLength]);
+            tiles[i]->adjacentTiles.push_back(tiles[i + sideLength]);
         }
     }
 }
 
-void Maze::generate_growing_tree(int flavor) {
+void Maze::generateGrowingTree(int flavor) {
     // Construct a temporary list of tiles, starting with one random tile
     srand(time(nullptr));
 
     vector<Tile*> temp;
-    int random1 = rand() % (this->num_tiles);
+    int random1 = rand() % (this->numTiles);
     temp.push_back(tiles[random1]);
 
     // Build maze
@@ -88,9 +88,9 @@ void Maze::generate_growing_tree(int flavor) {
         }
         // Construct a list of active's unconnected adjacent tiles
         vector <Tile*> unconnected_adjacent_tiles;
-        for (int i = 0; i < active->adjacent_tiles.size(); i++) {
-            if ((active->adjacent_tiles[i]->connected_tiles).empty()) {
-                unconnected_adjacent_tiles.push_back(active->adjacent_tiles[i]);
+        for (int i = 0; i < active->adjacentTiles.size(); i++) {
+            if ((active->adjacentTiles[i]->connectedTiles).empty()) {
+                unconnected_adjacent_tiles.push_back(active->adjacentTiles[i]);
             }
         }
         // If active has no unconnected adjacent tiles, remove active from temp
@@ -100,31 +100,31 @@ void Maze::generate_growing_tree(int flavor) {
             // Otherwise, connect active and one of its unconnected adjacent tiles to each other, and add that tile to temp
         else {
             int random3 = rand() % unconnected_adjacent_tiles.size();
-            active->connected_tiles.push_back(unconnected_adjacent_tiles[random3]);
-            unconnected_adjacent_tiles[random3]->connected_tiles.push_back(active);
+            active->connectedTiles.push_back(unconnected_adjacent_tiles[random3]);
+            unconnected_adjacent_tiles[random3]->connectedTiles.push_back(active);
             temp.push_back(unconnected_adjacent_tiles[random3]);
         }
     }
 }
 
 
-Maze::Maze(int side_length, int maze_type) : side_length(side_length), num_tiles(side_length * side_length), maze_type(maze_type) {
+Maze::Maze(int sideLength, int mazeType) : sideLength(sideLength), numTiles(sideLength * sideLength), mazeType(mazeType) {
     // Construct list of tiles and codify adjacency info
-    for (int i = 0; i < side_length; i++) {
-        for (int j = 0; j < side_length; j++) {
+    for (int i = 0; i < sideLength; i++) {
+        for (int j = 0; j < sideLength; j++) {
             Tile *next_tile = new Tile(j, i);
             tiles.push_back(next_tile);
         }
     }
-    codify_adjacency_info();
+    codifyAdjacencyInfo();
 
     // Build maze
-    if (maze_type == 0) {
+    if (mazeType == 0) {
         // Recursive Backtracker Algorithm
-        generate_growing_tree(0);
-    } else if (maze_type == 1) {
+        generateGrowingTree(0);
+    } else if (mazeType == 1) {
         // Prim's Algorithm
-        generate_growing_tree(1);
+        generateGrowingTree(1);
     }
 }
 
@@ -175,7 +175,7 @@ vector<pair<int, int>> Maze::dijkstraAlgorithm(sf::RenderWindow& window) {
             return path;
         }
 
-        for (Tile* neighbor : current->connected_tiles) {
+        for (Tile* neighbor : current->connectedTiles) {
             int new_distance = distance[current] + 1;
 
             if (new_distance < distance[neighbor]) {
@@ -225,7 +225,7 @@ vector<pair<int, int>> Maze::depthFirstSearch(sf::RenderWindow& window) {
         }
 
         // Explore connected tiles
-        for (Tile* neighbor : current->connected_tiles) {
+        for (Tile* neighbor : current->connectedTiles) {
             if (visited.find(neighbor) == visited.end()) {
                 visited.insert(neighbor);
                 s.push(neighbor);
@@ -258,14 +258,14 @@ void Maze::drawLines(sf::RenderWindow& window) {
 
     for (unsigned int i = 0; i < tiles.size(); i++) {
         // Draw horizontal line above top row and below last row tiles
-        if (i < side_length) { // Top row
+        if (i < sideLength) { // Top row
             line.setPosition(tiles[i]->sprite.getPosition().x, tiles[i]->sprite.getPosition().y);
             window.draw(line);
         }
 
-        if (i >= tiles.size() - side_length) { // Last row
+        if (i >= tiles.size() - sideLength) { // Last row
             bool hasBottomNeighbor = false;
-            for (auto neighbor : tiles[i]->connected_tiles) {
+            for (auto neighbor : tiles[i]->connectedTiles) {
                 if (neighbor->y > tiles[i]->y) {
                     hasBottomNeighbor = true;
                     break;
@@ -278,23 +278,23 @@ void Maze::drawLines(sf::RenderWindow& window) {
         }
 
         // Draw vertical line for left and right side boundaries
-        if (i % side_length == 0) { // Left column
+        if (i % sideLength == 0) { // Left column
             vLine.setPosition(tiles[i]->sprite.getPosition().x, tiles[i]->sprite.getPosition().y);
             window.draw(vLine);
         }
 
-        if ((i + 1) % side_length == 0) { // Right column
+        if ((i + 1) % sideLength == 0) { // Right column
             vLine.setPosition(tiles[i]->sprite.getPosition().x + 15, tiles[i]->sprite.getPosition().y);
             window.draw(vLine);
         }
 
         // Draw vertical lines between horizontally adjacent but not connected tiles
-        if ((i + 1) % side_length != 0) { // Not in right-most column
+        if ((i + 1) % sideLength != 0) { // Not in right-most column
             Tile* currentTile = tiles[i];
             Tile* rightTile = tiles[i + 1]; // Right adjacent tile
 
             bool isConnectedToRight = false;
-            for (auto& connectedTile : currentTile->connected_tiles) {
+            for (auto& connectedTile : currentTile->connectedTiles) {
                 if (connectedTile == rightTile) {
                     isConnectedToRight = true;
                     break;
@@ -308,12 +308,12 @@ void Maze::drawLines(sf::RenderWindow& window) {
         }
 
         // Draw horizontal lines between vertically adjacent but not connected tiles
-        if (i < tiles.size() - side_length) { // Not in bottom-most row
+        if (i < tiles.size() - sideLength) { // Not in bottom-most row
             Tile* currentTile = tiles[i];
-            Tile* bottomTile = tiles[i + side_length]; // Bottom adjacent tile
+            Tile* bottomTile = tiles[i + sideLength]; // Bottom adjacent tile
 
             bool isConnectedToBottom = false;
-            for (auto& connectedTile : currentTile->connected_tiles) {
+            for (auto& connectedTile : currentTile->connectedTiles) {
                 if (connectedTile == bottomTile) {
                     isConnectedToBottom = true;
                     break;
@@ -329,14 +329,14 @@ void Maze::drawLines(sf::RenderWindow& window) {
 }
 
 void Maze::displayMaze() {
-    vector<vector<char>> displayGrid(2 * side_length - 1, vector<char>(2 * side_length - 1, ' '));
+    vector<vector<char>> displayGrid(2 * sideLength - 1, vector<char>(2 * sideLength - 1, ' '));
 
     for (int i = 0; i < tiles.size(); i++) {
         int row = 2 * (tiles[i]->y);
         int col = 2 * (tiles[i]->x);
         displayGrid[row][col] = 'X';  // Mark the tile position
 
-        /*for (auto& connected : tiles[i]->connected_tiles) {
+        /*for (auto& connected : tiles[i]->connectedTiles) {
             if (connected->x == tiles[i]->x + 1) {
                 displayGrid[row][col + 1] = '-';  // Horizontal connection to the right
             }
