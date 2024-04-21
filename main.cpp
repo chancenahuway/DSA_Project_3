@@ -6,12 +6,12 @@ using namespace std;
 int main() {
     cout << "Hello! Welcome to the Rat Race Rebels' Maze Simulator!" << endl << endl;
     cout << "Please begin by choosing which algorithm you'd like to generate the maze!" << endl << endl;
-    cout << "Enter 0 for the Recursive Backtracker Algorithm or 1 for Prim's Algorith: ";
+    cout << "Enter 0 for the Recursive Backtracker Algorithm or 1 for Prim's Algorithm: ";
     int maze_type = -1;
     while (maze_type != 0 and maze_type != 1) {
         if (!(cin >> maze_type)) {
             cout << endl << "You have not selected a valid maze-generating algorithm. Please try again!" << endl << endl;
-            cout << "Enter 0 for the Recursive Backtracker Algorithm or 1 for Prim's Algorith: ";
+            cout << "Enter 0 for the Recursive Backtracker Algorithm or 1 for Prim's Algorithm: ";
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
             maze_type = -1;
@@ -20,7 +20,7 @@ int main() {
         cout << endl;
         if (maze_type !=0 and maze_type != 1) {
             cout << "You have not selected a valid maze-generating algorithm. Please try again!" << endl << endl;
-            cout << "Enter 0 for the Recursive Backtracker Algorithm or 1 for Prim's Algorith: ";
+            cout << "Enter 0 for the Recursive Backtracker Algorithm or 1 for Prim's Algorithm: ";
             maze_type = -1;
         }
     }
