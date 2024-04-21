@@ -335,23 +335,7 @@ void Maze::displayMaze() {
         int row = 2 * (tiles[i]->y);
         int col = 2 * (tiles[i]->x);
         displayGrid[row][col] = 'X';  // Mark the tile position
-
-        /*for (auto& connected : tiles[i]->connectedTiles) {
-            if (connected->x == tiles[i]->x + 1) {
-                displayGrid[row][col + 1] = '-';  // Horizontal connection to the right
-            }
-            if (connected->y == tiles[i]->y + 1) {
-                displayGrid[row + 1][col] = '|';  // Vertical connection downward
-            }
-        }*/
     }
-
-    /*for (auto& row : displayGrid) {
-        for (auto& col : row) {
-            cout << col;
-        }
-        cout << endl;
-    }*/
 }
 
 
