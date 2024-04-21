@@ -10,8 +10,8 @@ using namespace std;
 class Maze {
 private:
     struct Tile {
-        vector<Tile*> connected_tiles;
-        vector<Tile*> adjacent_tiles;
+        vector<Tile*> connectedTiles;
+        vector<Tile*> adjacentTiles;
         int x, y;
         sf::Sprite sprite;
         sf::Sprite visiting;
@@ -29,22 +29,22 @@ private:
         };
     };
 
-    int side_length;
-    int num_tiles;
-    int maze_type;
+    int sideLength;
+    int numTiles;
+    int mazeType;
     vector<Tile*> tiles;
 
-    void codify_adjacency_info();
-    void generate_growing_tree(int flavor);
+    void codifyAdjacencyInfo();
+    void generateGrowingTree(int flavor);
 
 public:
-    Maze(int side_length, int maze_type);
+    Maze(int sideLength, int mazeType);
     ~Maze();
     vector<pair<int, int>> dijkstraAlgorithm(sf::RenderWindow& window);
     vector<pair<int, int>> depthFirstSearch(sf::RenderWindow& window);
     void displayMaze();
     vector<Tile*>& getAllTiles();
-    int getSideLength() const { return side_length; }
+    int getSideLength() const { return sideLength; }
     void drawLines(sf::RenderWindow& window);
     void drawAndUpdate(sf::RenderWindow& window);
 
