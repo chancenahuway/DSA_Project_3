@@ -1,4 +1,4 @@
-Most up to data branch in this repository is Dijkstra's-Algorithm-w/-main-file-interface-updated-+-mazes-fully-randomized
+Most up-to-date branch in this repository is Dijkstra's-Algorithm-w/-main-file-interface-updated-+-mazes-fully-randomized
 
 Please download contents of that branch to run final program
 
